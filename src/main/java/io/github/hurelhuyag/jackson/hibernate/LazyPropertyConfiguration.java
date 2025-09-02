@@ -15,7 +15,7 @@ import java.util.Map;
 public class LazyPropertyConfiguration {
 
     @Bean
-    Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
+    Jackson2ObjectMapperBuilderCustomizer hibernateLazyPropertySupportForJackson() {
         return builder -> builder
                 .mixIn(ManagedEntity.class, LazyPropertyFilterMixin.class)
                 .mixIn(HibernateProxy.class, LazyPropertyFilterMixin.class)
