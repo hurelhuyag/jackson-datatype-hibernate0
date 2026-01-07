@@ -16,6 +16,15 @@ that should enough to configure spring managed ObjectMapper.
 </dependency>
 ```
 
+For spring-boot 4.0
+```xml
+<dependency>
+    <groupId>io.github.hurelhuyag</groupId>
+    <artifactId>jackson-datatype-hibernate</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
 ## Contribution
 
 It is Apache 2.0 Licensed open source project. If you anything in you mind to improve this project. Feel free to file an issue or open pull request.
