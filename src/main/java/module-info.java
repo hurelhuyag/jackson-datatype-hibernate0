@@ -1,6 +1,6 @@
 module jackson.datatype.hibernate {
 
-    requires com.fasterxml.jackson.databind;
+    requires tools.jackson.databind;
 
     requires jakarta.persistence;
 
@@ -8,7 +8,7 @@ module jackson.datatype.hibernate {
 
     requires spring.boot.autoconfigure;
     requires spring.context;
-    requires spring.web;
+    requires spring.boot.jackson;
 
     exports io.github.hurelhuyag.jackson.hibernate;
 }

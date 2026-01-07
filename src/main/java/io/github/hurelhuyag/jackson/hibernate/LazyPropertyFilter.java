@@ -1,15 +1,13 @@
 package io.github.hurelhuyag.jackson.hibernate;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
-import com.fasterxml.jackson.databind.ser.PropertyFilter;
-import com.fasterxml.jackson.databind.ser.PropertyWriter;
+import tools.jackson.core.JsonGenerator;
 import jakarta.persistence.*;
 import org.hibernate.Hibernate;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
+import tools.jackson.databind.ser.BeanPropertyWriter;
+import tools.jackson.databind.ser.PropertyFilter;
+import tools.jackson.databind.ser.PropertyWriter;
 
 import java.lang.annotation.Annotation;
 import java.util.function.Function;
@@ -17,32 +15,31 @@ import java.util.function.Function;
 public class LazyPropertyFilter implements PropertyFilter {
 
     @Override
-    public void serializeAsField(Object pojo, JsonGenerator gen, SerializerProvider prov, PropertyWriter writer) throws Exception {
+    public void serializeAsProperty(Object pojo, JsonGenerator g, SerializationContext ctxt, PropertyWriter writer) throws Exception {
         var initialized = isPropertyInitialized((BeanPropertyWriter) writer, pojo);
         if (initialized) {
-            writer.serializeAsField(pojo, gen, prov);
-        } else if (!gen.canOmitFields()) { // since 2.3
-            writer.serializeAsOmittedField(pojo, gen, prov);
+            writer.serializeAsProperty(pojo, g, ctxt);
+        } else if (!g.canOmitProperties()) { // since 2.3
+            writer.serializeAsOmittedProperty(pojo, g, ctxt);
         }
     }
 
     @Override
-    public void serializeAsElement(Object elementValue, JsonGenerator gen, SerializerProvider prov, PropertyWriter writer) throws Exception {
+    public void serializeAsElement(Object elementValue, JsonGenerator g, SerializationContext ctxt, PropertyWriter writer) throws Exception {
         var initialized = isPropertyInitialized((BeanPropertyWriter) writer, elementValue);
         if (initialized) {
-            writer.serializeAsElement(elementValue, gen, prov);
+            writer.serializeAsElement(elementValue, g, ctxt);
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public void depositSchemaProperty(PropertyWriter writer, ObjectNode propertiesNode, SerializerProvider provider) throws JsonMappingException {
-        writer.depositSchemaProperty(propertiesNode, provider);
+    public void depositSchemaProperty(PropertyWriter writer, JsonObjectFormatVisitor v, SerializationContext ctxt) {
+        writer.depositSchemaProperty(v, ctxt);
     }
 
     @Override
-    public void depositSchemaProperty(PropertyWriter writer, JsonObjectFormatVisitor objectVisitor, SerializerProvider provider) throws JsonMappingException {
-        writer.depositSchemaProperty(objectVisitor, provider);
+    public LazyPropertyFilter snapshot() {
+        return this;
     }
 
     public static boolean isPropertyInitialized(BeanPropertyWriter prop, Object bean) throws Exception {
