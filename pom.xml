@@ -13,7 +13,7 @@
 
     <groupId>io.github.hurelhuyag</groupId>
     <artifactId>jackson-datatype-hibernate</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>jackson-datatype-hibernate</name>
     <description>The simplest hibernate/JPA integration with jackson JSON serialization</description>
     <url>https://github.com/hurelhuyag/jackson-datatype-hibernate</url>

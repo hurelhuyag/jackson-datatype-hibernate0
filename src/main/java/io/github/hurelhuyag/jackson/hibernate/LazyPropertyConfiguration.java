@@ -1,7 +1,5 @@
 package io.github.hurelhuyag.jackson.hibernate;
 
-import org.hibernate.engine.spi.ManagedEntity;
-import org.hibernate.proxy.HibernateProxy;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer;
@@ -14,11 +12,12 @@ import java.util.Map;
 @ConditionalOnClass({JsonMapperBuilderCustomizer.class})
 public class LazyPropertyConfiguration {
 
+    private static final String LAZY_PROPERTY_FILTER = EntityAnnotationIntrospector.LAZY_PROPERTY_FILTER;
+
     @Bean
     JsonMapperBuilderCustomizer hibernateLazyPropertySupportForJackson() {
         return builder -> builder
-                .addMixIn(ManagedEntity.class, LazyPropertyFilterMixin.class)
-                .addMixIn(HibernateProxy.class, LazyPropertyFilterMixin.class)
-                .filterProvider(new SimpleFilterProvider(Map.of("lazyPropertyFilter", new LazyPropertyFilter())));
+                .addModule(new EntityAnnotationIntrospectorModule())
+                .filterProvider(new SimpleFilterProvider(Map.of(LAZY_PROPERTY_FILTER, new LazyPropertyFilter())));
     }
 }
