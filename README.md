@@ -21,7 +21,7 @@ For spring-boot 4.0
 <dependency>
     <groupId>io.github.hurelhuyag</groupId>
     <artifactId>jackson-datatype-hibernate</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
